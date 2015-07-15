@@ -11,6 +11,7 @@ var radiusInput = document.getElementById('circle-radius');
 var randomizeAll = document.getElementById('randomize-all');
 var removeAll = document.getElementById('remove-all');
 var changeAll = document.getElementById('change-all');
+var generateAll = document.getElementById('display-random');
 var objArray = [];
 
 //classes
@@ -45,10 +46,31 @@ Square.prototype.draw = function (x, y, color, width) {
 }
 
 //fuctions
-function chaneAllColors(argument) {
+function drawRandom() {
+  for (var i = 0; i <= 100; i++) {
+    var xRandom = Math.round(-200 + Math.random() * 700);
+    var yRandom = Math.round(-200 + Math.random() * 700);
+    var newSquare = new Square(xRandom, yRandom, randomColor(), widthInput.value);
+    objArray.push(newSquare);
+    newSquare.draw(xRandom, yRandom, randomColor(), widthInput.value);
+
+    var newCircle = new Circle(xRandom, yRandom, randomColor(), radiusInput.value);
+    objArray.push(newCircle);
+    newCircle.draw(xRandom, yRandom, randomColor(), radiusInput.value);
+  }
+  console.log(objArray);
+}
+
+generateAll.addEventListener('click', drawRandom);
+
+function changeAllColors(argument) {
   for (var i = 0; i < objArray.length; i++) {
-    objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value);
-    objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value);
+    if (objArray[i].width) {
+      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].width);
+    }
+    else {
+      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].radius);
+    }
   }
 }
 
@@ -104,7 +126,7 @@ function widthRadiusCheck() {
 canvas.addEventListener('click', getPosition);
 objectType.addEventListener('change', widthRadiusCheck);
 randomizeAll.addEventListener('click', reDraw);
-changeAll.addEventListener('click', chaneAllColors);
+changeAll.addEventListener('click', changeAllColors);
 colorPicker.addEventListener('change', function () {
   colorCode.value = colorPicker.value;
 });
