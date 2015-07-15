@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  br
+  canvas#canvas(height='400', width='500')
+  br
+  label(for='color') Color:
+  input#color-picker(type="color")
+  
+  script(src='/javascripts/canvas-script.js')
