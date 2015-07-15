@@ -10,3 +10,21 @@ a {
 #canvas {
   border: solid black 1px;
 }
+
+.left-row {
+  display: inline-block;
+}
+
+.right-row {
+  display: inline-block;
+  float: right;
+  width: 40%;
+}
+
+.selectors label {
+  display: block;
+  margin-top: 4%;
+}
+
+#output {
+}

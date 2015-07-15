@@ -1,6 +1,4 @@
-//drawing a circle
-// context.arc(centerX, centerY, radius, startAngle, endAngle)
-
+//DOM vars
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var colorPicker = document.getElementById('color-picker');
@@ -12,6 +10,9 @@ var randomizeAll = document.getElementById('randomize-all');
 var removeAll = document.getElementById('remove-all');
 var changeAll = document.getElementById('change-all');
 var generateAll = document.getElementById('display-random');
+// var outputDiv = document.getElementById('output');
+var objOutputDiv = document.getElementById('obj-output');
+var arrayOutputDiv = document.getElementById('array-output');
 var objArray = [];
 
 //classes
@@ -33,36 +34,45 @@ function Square(x, y, color, width) {
 
 //prototypes
 Circle.prototype = new Shape();
+//drawing a circle
+// context.arc(centerX, centerY, radius, startAngle, endAngle)
 Circle.prototype.draw = function (x, y, color, radius) {
   ctx.beginPath();
   ctx.arc(x,y,radius,0,2*Math.PI);
   ctx.fillStyle = color;
   ctx.fill();
+  arrayOutputDiv.innerHTML = JSON.stringify(objArray);
 }
 Square.prototype = new Shape();
 Square.prototype.draw = function (x, y, color, width) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, width, width);
+  arrayOutputDiv.innerHTML = JSON.stringify(objArray);
 }
 
 //fuctions
-function drawRandom() {
-  for (var i = 0; i <= 100; i++) {
-    var xRandom = Math.round(-200 + Math.random() * 700);
-    var yRandom = Math.round(-200 + Math.random() * 700);
-    var newSquare = new Square(xRandom, yRandom, randomColor(), widthInput.value);
-    objArray.push(newSquare);
-    newSquare.draw(xRandom, yRandom, randomColor(), widthInput.value);
 
-    var newCircle = new Circle(xRandom, yRandom, randomColor(), radiusInput.value);
+//fuction for random shape generation
+function drawRandom() {
+  var xRandom,
+      yRandom,
+      randomWidth,
+      randomRadius;
+  for (var i = 0; i <= 100; i++) {
+    xRandom = Math.round(Math.random() * canvas.width);
+    yRandom = Math.round(Math.random() * canvas.width);
+    randomWidth = Math.round(Math.random() * widthInput.value);
+    randomRadius = Math.round(Math.random() * radiusInput.value);
+    var newSquare = new Square(xRandom, yRandom, randomColor(), randomWidth);
+    objArray.push(newSquare);
+    newSquare.draw(xRandom, yRandom, randomColor(), randomWidth);
+    var newCircle = new Circle(xRandom, yRandom, randomColor(), randomRadius);
     objArray.push(newCircle);
-    newCircle.draw(xRandom, yRandom, randomColor(), radiusInput.value);
+    newCircle.draw(xRandom, yRandom, randomColor(), randomRadius);
   }
-  console.log(objArray);
 }
 
-generateAll.addEventListener('click', drawRandom);
-
+//change all shapes to the same color and keep shape
 function changeAllColors(argument) {
   for (var i = 0; i < objArray.length; i++) {
     if (objArray[i].width) {
@@ -74,6 +84,7 @@ function changeAllColors(argument) {
   }
 }
 
+//random color generator fuction
 function randomColor() {
   return "#" + Math.random().toString(16).slice(2, 8);
 }
@@ -91,8 +102,8 @@ function reDraw() {
   }
 }
 
+//get x and y position of clicks
 function getPosition(event) {
-  console.log(objArray);
   var x = event.x;
   var y = event.y;
   if (objectType.value === 'square') {
@@ -111,13 +122,14 @@ function getPosition(event) {
   }
 }
 
+//show or hide 'width' or 'radius' depending on what type is selected
 function widthRadiusCheck() {
   if (objectType.value === 'circle') {
-    radiusInput.parentNode.style.display = 'inline';
+    radiusInput.parentNode.style.display = 'block';
     widthInput.parentNode.style.display = 'none';
   }
   else {
-    widthInput.parentNode.style.display = 'inline';
+    widthInput.parentNode.style.display = 'block';
     radiusInput.parentNode.style.display = 'none';
   }
 }
@@ -127,6 +139,7 @@ canvas.addEventListener('click', getPosition);
 objectType.addEventListener('change', widthRadiusCheck);
 randomizeAll.addEventListener('click', reDraw);
 changeAll.addEventListener('click', changeAllColors);
+generateAll.addEventListener('click', drawRandom);
 colorPicker.addEventListener('change', function () {
   colorCode.value = colorPicker.value;
 });
@@ -138,5 +151,6 @@ radiusInput.addEventListener('change', function () {
 });
 removeAll.addEventListener('click', function () {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  arrayOutputDiv.innerHTML = '';
   objArray = [];
 });

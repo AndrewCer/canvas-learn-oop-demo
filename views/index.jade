@@ -1,31 +1,41 @@
 extends layout
 
 block content
-  h1= title
-  br
-  canvas#canvas(height='400', width='500')
-  br
-  label(for='color') Type:
-  select#type
-    option(value='square') Square
-    option(value='circle') Circle
-  br
-  br
-  label(for='color') Color:
-    input#color-picker(type="color" value='#00EFFD')
-  label Change All to Selected Color:
-    input#change-all(type='button', value='Change All')
-  label Color Code:
-    input#color-code(type='text' value='#00effd')
-  label Width:
-    input#square-width(type='text' value='100')
-  label(style='display: none;') Radius:
-    input#circle-radius(type='text' value='50')
-  label Randomize All Colors:
-    input#randomize-all(type='button', value='Randomize')
-  label Remove All Shapes:
-    input#remove-all(type='button', value='Remove')
-  label Display Random Shapes:
-    input#display-random(type='button', value='Generate')
-  
+  div#wrapper
+    div.container
+      h1= title
+    div.left-row  
+      canvas#canvas(height='500', width='600')
+    div.right-row
+      div.selectors
+        fieldset
+          legend Shape Manipulation
+          label(for='color') Type:
+          select#type
+            option(value='square') Square
+            option(value='circle') Circle
+          label(for='color') Color:
+          input#color-picker(type="color" value='#00EFFD')
+          label Change All to Selected Color:
+          input#change-all(type='button', value='Change All')
+          label Color Code:
+          input#color-code(type='text' value='#00effd')
+          label Width:
+            input#square-width(type='text' value='100')
+          label(style='display: none;') Radius:
+            input#circle-radius(type='text' value='50')
+          label Randomize All Colors:
+            input#randomize-all(type='button', value='Randomize')
+          label Remove All Shapes:
+            input#remove-all(type='button', value='Remove')
+          label Display Random Shapes:
+            input#display-random(type='button', value='Generate')
+      div#output
+        fieldset
+          legend Behind the Scenes
+          h4 Object Created
+          div#obj-output
+          h4 Array
+          div#array-output
+    
   script(src='/javascripts/canvas-script.js')
