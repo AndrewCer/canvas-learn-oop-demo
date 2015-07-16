@@ -10,9 +10,9 @@ var randomizeAll = document.getElementById('randomize-all');
 var removeAll = document.getElementById('remove-all');
 var changeAll = document.getElementById('change-all');
 var generateAll = document.getElementById('display-random');
-// var outputDiv = document.getElementById('output');
 var objOutputDiv = document.getElementById('obj-output');
 var arrayOutputDiv = document.getElementById('array-output');
+var objAndColorP = document.getElementsByClassName('object-and-color');
 var objArray = [];
 
 //classes
@@ -36,23 +36,48 @@ function Square(x, y, color, width) {
 Circle.prototype = new Shape();
 //drawing a circle
 // context.arc(centerX, centerY, radius, startAngle, endAngle)
-Circle.prototype.draw = function (x, y, color, radius) {
+Circle.prototype.draw = function (x, y, color, radius, randomC) {
   ctx.beginPath();
   ctx.arc(x,y,radius,0,2*Math.PI);
   ctx.fillStyle = color;
   ctx.fill();
-  arrayOutputDiv.innerHTML = JSON.stringify(objArray);
+  displayTextColor(color, true, false, randomC);
 }
 Square.prototype = new Shape();
-Square.prototype.draw = function (x, y, color, width) {
+Square.prototype.draw = function (x, y, color, width, randomC) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, width, width);
-  arrayOutputDiv.innerHTML = JSON.stringify(objArray);
+  displayTextColor(color, true, true, randomC);
 }
 
 //fuctions
+//called from square and circle .draw methods. Determins the color of the p output
+function displayTextColor(color, newColor, square, random) {
+  if (newColor && !random) {
+    if (square) {
+      var p = document.createElement('p');
+      p.className = 'object-and-color';
+      p.style.display = 'inline'
+      for (var i = 0; i < objArray.length; i++) {
+        p.style.color = objArray[i].color
+      }
+      arrayOutputDiv.appendChild(p);
+      p.innerHTML = "Square, "
+    }
+    else {
+      var p = document.createElement('p');
+      p.className = 'object-and-color';
+      p.style.display = 'inline'
+      for (var i = 0; i < objArray.length; i++) {
+        p.style.color = objArray[i].color
+      }
+      arrayOutputDiv.appendChild(p);
+      p.innerHTML = "Circle, "
+    }
+  }
+}
 
-//fuction for random shape generation
+//random shape generation
 function drawRandom() {
   var xRandom,
       yRandom,
@@ -73,15 +98,16 @@ function drawRandom() {
 }
 
 //change all shapes to the same color and keep shape
-function changeAllColors(argument) {
+function changeAllColors() {
   for (var i = 0; i < objArray.length; i++) {
     if (objArray[i].width) {
-      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].width);
+      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].width, true);
     }
     else {
-      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].radius);
+      objArray[i].draw(objArray[i].x, objArray[i].y, colorCode.value, objArray[i].radius, true);
     }
   }
+  behindTheScenesColor(colorCode.value);
 }
 
 //random color generator fuction
@@ -94,10 +120,24 @@ function reDraw() {
   for (var i = 0; i < objArray.length; i++) {
     objArray[i].color = randomColor();
     if (objArray[i].width) {
-      objArray[i].draw(objArray[i].x, objArray[i].y, objArray[i].color, objArray[i].width);
+      objArray[i].draw(objArray[i].x, objArray[i].y, objArray[i].color, objArray[i].width, true);
     }
     else {
-      objArray[i].draw(objArray[i].x, objArray[i].y, objArray[i].color, objArray[i].radius);
+      objArray[i].draw(objArray[i].x, objArray[i].y, objArray[i].color, objArray[i].radius, true);
+    }
+  }
+  behindTheScenesColor();
+}
+
+function behindTheScenesColor(color) {
+  if (color) {
+    for (var i = 0; i < arrayOutputDiv.childNodes.length; i++) {
+      arrayOutputDiv.childNodes[i].style.color = color;
+    }  
+  }
+  else {
+    for (var i = 0; i < arrayOutputDiv.childNodes.length; i++) {
+      arrayOutputDiv.childNodes[i].style.color = objArray[i].color;
     }
   }
 }
