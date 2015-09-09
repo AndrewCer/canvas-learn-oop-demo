@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Learn OOP with Canvas' });
+  res.render('index', { title: 'Canvas OOP Shapes Playground' });
 });
 
 module.exports = router;
